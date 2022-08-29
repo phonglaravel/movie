@@ -106,7 +106,7 @@ class IndexController extends Controller
         $topmonth = Movie::orderBy('top_month','DESC')->where('top_month','>',0)->take(5)->get();
     
         
-        $tapphim = substr($tap,4,1);
+        $tapphim = substr($tap,4,2);
         $genres = Genre::where('status',1)->get();
         $categories = Category::where('status',1)->whereNotIn('id',[17])->get();
         $countries = Country::orderBy('id', 'ASC')->where('status',1)->get();
