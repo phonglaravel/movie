@@ -34,7 +34,9 @@ Route::get('/search',[IndexController::class, 'search'])->name('page.search');
 Route::post('/hot',[MovieController::class,'hot']);
 Route::post('/new',[MovieController::class,'new']);
 Route::post('/year',[MovieController::class,'year']);
-
+Route::post('/day',[MovieController::class,'day'])->name('clear_topday');
+Route::post('/week',[MovieController::class,'week'])->name('clear_topweek');
+Route::post('/month',[MovieController::class,'month'])->name('clear_topmonth');
 
 Auth::routes();
 

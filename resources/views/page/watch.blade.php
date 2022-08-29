@@ -33,8 +33,10 @@
              <div class="clearfix"></div>
              <div class="title-block">
                 
-                <div class="title-wrapper-xem full">
-                   <h3 class="entry-title">{{$movie->title}} - Tập {{$episode->episode}}</h3>
+                <div class=" full">
+                   <h3 class="entry-title">{{$movie->title}}  @if ($movie->fullepi!=1)
+                     - Tập {{$episode->episode}}
+                   @endif</h3>
                 </div>
              </div>
              <div class="entry-content htmlwrap clearfix collapse" id="expand-post-content">

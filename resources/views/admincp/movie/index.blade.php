@@ -2,10 +2,37 @@
 
 @section('content')
 <div class="container-fluid">
+    <ul  class="nav">
+        <li>
+            <a class="btn btn-primary mr-2" href="{{route('movie.create')}}" role="button">Thêm phim</a>
+        </li>
+        <li>
+            <form action="{{route('clear_topday')}}" method="POST">
+                @csrf
+                <button type="submit" class="btn btn-primary mr-2">Clear Day</button>
+            </form>
+        </li>
+        <li>
+            <form  action="{{route('clear_topweek')}}" method="POST">
+                @csrf
+                <button type="submit" class="btn btn-primary mr-2">Clear Week</button>
+            </form>
+        </li>
+        <li>
+            <form  action="{{route('clear_topmonth')}}" method="POST">
+                @csrf
+                <button type="submit" class="btn btn-primary mr-2">Clear Month</button>
+            </form>
+        </li>
+        <li>
+            <span id="time"></span><span id="day"></span><span id="date"></span>
+        </li>
+    </ul>
     <div class="row justify-content-center">
         
         <div class="col-md-12 danhsach">
-            <a class="btn btn-primary" href="{{route('movie.create')}}" role="button">Thêm phim</a>
+            
+            
             <table class="table" id="tablemovie">
                 <thead>
                   <tr>

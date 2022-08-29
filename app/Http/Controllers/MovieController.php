@@ -271,4 +271,28 @@ class MovieController extends Controller
         
         $movie->save();
     }
+    public function day()
+    {
+        foreach(Movie::all() as $item){
+            $item->top_day = 0;
+            $item->save();
+        }
+        return back();
+    }
+    public function week()
+    {
+        foreach(Movie::all() as $item){
+            $item->top_week = 0;
+            $item->save();
+        }
+        return back();
+    }
+    public function month()
+    {
+        foreach(Movie::all() as $item){
+            $item->top_month = 0;
+            $item->save();
+        }
+        return back();
+    }
 }

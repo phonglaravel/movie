@@ -168,6 +168,50 @@
 });
 
 </script>
+<script>
+  const weekdays = ['CN', 'Thứ 2', 'Thứ 3', 'Thứ 4', 'Thứ 5', 'Thứ 6', 'Thứ 7'];
+
+  /*clock settings*/
+  let clock = setTimeout(function clockSet() {
+  const today = new Date(); //fetching date
+
+  // date options
+  let y = today.getFullYear();
+  let mo = (today.getMonth() + 1);
+  let d = today.getDate();
+  let h = today.getHours();
+  let m = today.getMinutes();
+  let s = today.getSeconds();
+  let am = ''; // am:pm empty string
+
+  let day = weekdays[today.getDay()]; // turning number to weekdays. 
+
+
+  //make douple digits
+  mo = checkTime(mo);
+  d = checkTime(d);
+  h = checkTime(h);
+  m = checkTime(m);
+  s = checkTime(s);
+
+  function checkTime(i) {
+  if (i < 10) {
+    i = '0' + i;
+  }
+  return i;
+  }
+
+  const time = h + ':' + m + ':' + s; //full time
+  const date = d + '/' + mo + '/' + y;
+  document.getElementById('time').textContent = time; //fill time
+
+  document.getElementById('day').textContent = " "+day; 
+  document.getElementById('date').textContent = " "+date; 
+
+
+  clock = setTimeout(clockSet, 1000); //nest setTimeOut 
+  }, 1000) //repeat every second
+</script>
     
   
   
