@@ -28,5 +28,8 @@ class Movie extends Model
     public function episode(){
         return $this->hasMany(Episode::class);
     }
+    public function view_day(){
+        return $this->hasMany(View::class,'movie_id');
+    }
 
 }

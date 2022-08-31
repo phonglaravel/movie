@@ -6,9 +6,12 @@ use App\Models\Category;
 use App\Models\Country;
 use App\Models\Episode;
 use App\Models\Genre;
+use App\Models\MonthView;
 use App\Models\Movie;
 use App\Models\Movie_category;
 use App\Models\Movie_genre;
+use App\Models\View;
+use App\Models\WeekView;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 
@@ -17,9 +20,18 @@ class IndexController extends Controller
     
     public function index()
     {
-        $topday = Movie::orderBy('top_day','DESC')->where('top_day','>',0)->take(5)->get();
-        $topweek = Movie::orderBy('top_week','DESC')->where('top_week','>',0)->take(5)->get();
-        $topmonth = Movie::orderBy('top_month','DESC')->where('top_month','>',0)->take(5)->get();
+        $topday = View::orderBy('view','DESC')
+        ->where('time',Carbon::now('Asia/Ho_Chi_minh')->format('d/m/Y'))
+        ->take(5)->get();
+        $topweek = WeekView::orderBy('view','DESC')
+        ->where('week',Carbon::now('Asia/Ho_Chi_minh')->weekOfYear)
+        ->where('year',Carbon::now('Asia/Ho_Chi_minh')->format('Y'))
+        ->take(5)->get();
+        $topmonth = MonthView::orderBy('view','DESC')
+        ->where('month',Carbon::now('Asia/Ho_Chi_minh')->format('m'))
+        ->where('year',Carbon::now('Asia/Ho_Chi_minh')->format('Y'))
+        ->take(5)->get();
+        
         $genres = Genre::where('status',1)->get();
         $categories = Category::where('status',1)->whereNotIn('id',[17])->get();
         $countries = Country::orderBy('id', 'ASC')->where('status',1)->get();
@@ -35,9 +47,17 @@ class IndexController extends Controller
     }
     public function category($slug)
     {
-        $topday = Movie::orderBy('top_day','DESC')->where('top_day','>',0)->take(5)->get();
-        $topweek = Movie::orderBy('top_week','DESC')->where('top_week','>',0)->take(5)->get();
-        $topmonth = Movie::orderBy('top_month','DESC')->where('top_month','>',0)->take(5)->get();
+        $topday = View::orderBy('view','DESC')
+        ->where('time',Carbon::now('Asia/Ho_Chi_minh')->format('d/m/Y'))
+        ->take(5)->get();
+        $topweek = WeekView::orderBy('view','DESC')
+        ->where('week',Carbon::now('Asia/Ho_Chi_minh')->weekOfYear)
+        ->where('year',Carbon::now('Asia/Ho_Chi_minh')->format('Y'))
+        ->take(5)->get();
+        $topmonth = MonthView::orderBy('view','DESC')
+        ->where('month',Carbon::now('Asia/Ho_Chi_minh')->format('m'))
+        ->where('year',Carbon::now('Asia/Ho_Chi_minh')->format('Y'))
+        ->take(5)->get();
         $genres = Genre::where('status',1)->get();
         $categories = Category::where('status',1)->whereNotIn('id',[17])->get();
         $countries = Country::orderBy('id', 'ASC')->where('status',1)->get();
@@ -53,9 +73,17 @@ class IndexController extends Controller
     }
     public function genre($slug)
     {
-        $topday = Movie::orderBy('top_day','DESC')->where('top_day','>',0)->take(5)->get();
-        $topweek = Movie::orderBy('top_week','DESC')->where('top_week','>',0)->take(5)->get();
-        $topmonth = Movie::orderBy('top_month','DESC')->where('top_month','>',0)->take(5)->get();
+        $topday = View::orderBy('view','DESC')
+        ->where('time',Carbon::now('Asia/Ho_Chi_minh')->format('d/m/Y'))
+        ->take(5)->get();
+        $topweek = WeekView::orderBy('view','DESC')
+        ->where('week',Carbon::now('Asia/Ho_Chi_minh')->weekOfYear)
+        ->where('year',Carbon::now('Asia/Ho_Chi_minh')->format('Y'))
+        ->take(5)->get();
+        $topmonth = MonthView::orderBy('view','DESC')
+        ->where('month',Carbon::now('Asia/Ho_Chi_minh')->format('m'))
+        ->where('year',Carbon::now('Asia/Ho_Chi_minh')->format('Y'))
+        ->take(5)->get();
         $genres = Genre::where('status',1)->get();
         $categories = Category::where('status',1)->whereNotIn('id',[17])->get();
         $countries = Country::orderBy('id', 'ASC')->where('status',1)->get();
@@ -71,9 +99,17 @@ class IndexController extends Controller
     }
     public function country($slug)
     {
-        $topday = Movie::orderBy('top_day','DESC')->where('top_day','>',0)->take(5)->get();
-        $topweek = Movie::orderBy('top_week','DESC')->where('top_week','>',0)->take(5)->get();
-        $topmonth = Movie::orderBy('top_month','DESC')->where('top_month','>',0)->take(5)->get();
+        $topday = View::orderBy('view','DESC')
+        ->where('time',Carbon::now('Asia/Ho_Chi_minh')->format('d/m/Y'))
+        ->take(5)->get();
+        $topweek = WeekView::orderBy('view','DESC')
+        ->where('week',Carbon::now('Asia/Ho_Chi_minh')->weekOfYear)
+        ->where('year',Carbon::now('Asia/Ho_Chi_minh')->format('Y'))
+        ->take(5)->get();
+        $topmonth = MonthView::orderBy('view','DESC')
+        ->where('month',Carbon::now('Asia/Ho_Chi_minh')->format('m'))
+        ->where('year',Carbon::now('Asia/Ho_Chi_minh')->format('Y'))
+        ->take(5)->get();
         $genres = Genre::where('status',1)->get();
         $categories = Category::where('status',1)->whereNotIn('id',[17])->get();
         $countries = Country::orderBy('id', 'ASC')->where('status',1)->get();
@@ -88,10 +124,42 @@ class IndexController extends Controller
         $categories = Category::where('status',1)->whereNotIn('id',[17])->get();
         $countries = Country::orderBy('id', 'ASC')->where('status',1)->get();
         $movie = Movie::with('movie_genre')->where('slug_movie',$slug)->first();
-        $movie->top_day = $movie->top_day + 1;
-        $movie->top_week = $movie->top_week + 1;
-        $movie->top_month = $movie->top_month + 1;
-      
+        $today = Carbon::now('Asia/Ho_Chi_minh');
+        $day = View::where('time',Carbon::now('Asia/Ho_Chi_minh')->format('d/m/Y'))->where('movie_id',$movie->id)->first();
+        if($day==null){
+            $v = new View();
+            $v->time = Carbon::now('Asia/Ho_Chi_minh')->format('d/m/Y');
+            $v->movie_id = $movie->id;
+            $v->view = 1;
+            $v->save();
+        }else{
+            $day->view =  $day->view +1;
+            $day->save();
+        }
+        $week = WeekView::where('week',Carbon::now('Asia/Ho_Chi_minh')->weekOfYear)->where('year',Carbon::now('Asia/Ho_Chi_minh')->format('Y'))->where('movie_id',$movie->id)->first();
+        if($week==null){
+            $v = new WeekView();
+            $v->week = Carbon::now('Asia/Ho_Chi_minh')->weekOfYear;
+            $v->year = Carbon::now('Asia/Ho_Chi_minh')->format('Y');
+            $v->movie_id = $movie->id;
+            $v->view = 1;
+            $v->save();
+        }else{
+            $week->view =  $week->view +1;
+            $week->save();
+        }
+        $month = MonthView::where('month',Carbon::now('Asia/Ho_Chi_minh')->format('m'))->where('year',Carbon::now('Asia/Ho_Chi_minh')->format('Y'))->where('movie_id',$movie->id)->first();
+        if($month==null){
+            $v = new MonthView();
+            $v->month = Carbon::now('Asia/Ho_Chi_minh')->format('m');
+            $v->year = Carbon::now('Asia/Ho_Chi_minh')->format('Y');
+            $v->movie_id = $movie->id;
+            $v->view = 1;
+            $v->save();
+        }else{
+            $month->view =  $month->view +1;
+            $month->save();
+        }
         $movie->view = $movie->view+1;
         $movie->save();
         $movie_lienquan = Movie::orderBy('id','DESC')->where('category_id',$movie->category_id)->whereNotIn('id',[$movie->id])->take(10)->get();
@@ -101,9 +169,17 @@ class IndexController extends Controller
     }
     public function watch($slug_movie, $tap)
     {
-        $topday = Movie::orderBy('top_day','DESC')->where('top_day','>',0)->take(5)->get();
-        $topweek = Movie::orderBy('top_week','DESC')->where('top_week','>',0)->take(5)->get();
-        $topmonth = Movie::orderBy('top_month','DESC')->where('top_month','>',0)->take(5)->get();
+        $topday = View::orderBy('view','DESC')
+        ->where('time',Carbon::now('Asia/Ho_Chi_minh')->format('d/m/Y'))
+        ->take(5)->get();
+        $topweek = WeekView::orderBy('view','DESC')
+        ->where('week',Carbon::now('Asia/Ho_Chi_minh')->weekOfYear)
+        ->where('year',Carbon::now('Asia/Ho_Chi_minh')->format('Y'))
+        ->take(5)->get();
+        $topmonth = MonthView::orderBy('view','DESC')
+        ->where('month',Carbon::now('Asia/Ho_Chi_minh')->format('m'))
+        ->where('year',Carbon::now('Asia/Ho_Chi_minh')->format('Y'))
+        ->take(5)->get();
     
         
         $tapphim = substr($tap,4,2);
@@ -124,9 +200,17 @@ class IndexController extends Controller
     }
     public function year($slug)
     {
-        $topday = Movie::orderBy('top_day','DESC')->where('top_day','>',0)->take(5)->get();
-        $topweek = Movie::orderBy('top_week','DESC')->where('top_week','>',0)->take(5)->get();
-        $topmonth = Movie::orderBy('top_month','DESC')->where('top_month','>',0)->take(5)->get();
+        $topday = View::orderBy('view','DESC')
+        ->where('time',Carbon::now('Asia/Ho_Chi_minh')->format('d/m/Y'))
+        ->take(5)->get();
+        $topweek = WeekView::orderBy('view','DESC')
+        ->where('week',Carbon::now('Asia/Ho_Chi_minh')->weekOfYear)
+        ->where('year',Carbon::now('Asia/Ho_Chi_minh')->format('Y'))
+        ->take(5)->get();
+        $topmonth = MonthView::orderBy('view','DESC')
+        ->where('month',Carbon::now('Asia/Ho_Chi_minh')->format('m'))
+        ->where('year',Carbon::now('Asia/Ho_Chi_minh')->format('Y'))
+        ->take(5)->get();
         $genres = Genre::where('status',1)->get();
         $categories = Category::where('status',1)->whereNotIn('id',[17])->get();
         $countries = Country::orderBy('id', 'ASC')->where('status',1)->get();
@@ -137,9 +221,17 @@ class IndexController extends Controller
     }
     public function tag($tag)
     {
-        $topday = Movie::orderBy('top_day','DESC')->where('top_day','>',0)->take(5)->get();
-        $topweek = Movie::orderBy('top_week','DESC')->where('top_week','>',0)->take(5)->get();
-        $topmonth = Movie::orderBy('top_month','DESC')->where('top_month','>',0)->take(5)->get();
+        $topday = View::orderBy('view','DESC')
+        ->where('time',Carbon::now('Asia/Ho_Chi_minh')->format('d/m/Y'))
+        ->take(5)->get();
+        $topweek = WeekView::orderBy('view','DESC')
+        ->where('week',Carbon::now('Asia/Ho_Chi_minh')->weekOfYear)
+        ->where('year',Carbon::now('Asia/Ho_Chi_minh')->format('Y'))
+        ->take(5)->get();
+        $topmonth = MonthView::orderBy('view','DESC')
+        ->where('month',Carbon::now('Asia/Ho_Chi_minh')->format('m'))
+        ->where('year',Carbon::now('Asia/Ho_Chi_minh')->format('Y'))
+        ->take(5)->get();
         $genres = Genre::where('status',1)->get();
         $categories = Category::where('status',1)->whereNotIn('id',[17])->get();
         $countries = Country::orderBy('id', 'ASC')->where('status',1)->get();
@@ -156,9 +248,17 @@ class IndexController extends Controller
     }
     public function search()
     {
-        $topday = Movie::orderBy('top_day','DESC')->where('top_day','>',0)->take(5)->get();
-        $topweek = Movie::orderBy('top_week','DESC')->where('top_week','>',0)->take(5)->get();
-        $topmonth = Movie::orderBy('top_month','DESC')->where('top_month','>',0)->take(5)->get();
+        $topday = View::orderBy('view','DESC')
+        ->where('time',Carbon::now('Asia/Ho_Chi_minh')->format('d/m/Y'))
+        ->take(5)->get();
+        $topweek = WeekView::orderBy('view','DESC')
+        ->where('week',Carbon::now('Asia/Ho_Chi_minh')->weekOfYear)
+        ->where('year',Carbon::now('Asia/Ho_Chi_minh')->format('Y'))
+        ->take(5)->get();
+        $topmonth = MonthView::orderBy('view','DESC')
+        ->where('month',Carbon::now('Asia/Ho_Chi_minh')->format('m'))
+        ->where('year',Carbon::now('Asia/Ho_Chi_minh')->format('Y'))
+        ->take(5)->get();
         $genres = Genre::where('status',1)->get();
         $categories = Category::where('status',1)->whereNotIn('id',[17])->get();
         $countries = Country::orderBy('id', 'ASC')->where('status',1)->get();

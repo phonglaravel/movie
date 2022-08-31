@@ -34,7 +34,7 @@
     <div id="halim_tab_popular_videos-widget-7" class="widget halim_tab_popular_videos-widget">
         <div class="section-bar clearfix">
            <div class="section-title">
-              <span>Top Views</span>
+              <span>Xem nhiều nhất</span>
               
            </div>
         </div>
@@ -58,16 +58,16 @@
                   <div role="tabpanel" class="tab-pane active halim-ajax-popular-post">
                      <div class="halim-ajax-popular-post-loading hidden"></div>
                      <div id="halim-ajax-popular-post" class="popular-post">
-                        @foreach ($topday as $item)
+                        @foreach ($topday as $key=> $item)
                         <div class="item post-37176">
-                           <a href="{{route('page.movie',$item->slug_movie)}}" title="{{$item->title}}">
+                           <a href="{{route('page.movie',$item->movie->slug_movie)}}" title="{{$item->movie->title}}">
                               <div class="item-link">
-                                 <img src="{{asset('image/posts/'.$item->image)}}" class="lazy post-thumb" alt="{{$item->title}}" title="{{$item->title}}" />
-                                 <span class="is_trailer">Trailer</span>
+                                 <img src="{{asset('image/posts/'.$item->movie->image)}}" class="lazy post-thumb" alt="{{$item->movie->title}}" title="{{$item->movie->title}}" />
+                                 <span class="is_trailer">Top {{$key+1}}</span>
                               </div>
-                              <p class="title">{{$item->title}}</p>
+                              <p class="title">{{$item->movie->title}}</p>
                            </a>
-                           <div class="viewsCount" style="color: #9d9d9d;">{{$item->top_day}} lượt xem</div>
+                           <div class="viewsCount" style="color: #9d9d9d;">{{$item->view}} lượt xem</div>
                            <div style="float: left;">
                               <span class="user-rate-image post-large-rate stars-large-vang" style="display: block;/* width: 100%; */">
                               <span style="width: 0%"></span>
@@ -84,16 +84,16 @@
                   <div role="tabpanel" class="tab-pane active halim-ajax-popular-post">
                      <div class="halim-ajax-popular-post-loading hidden"></div>
                      <div id="halim-ajax-popular-post" class="popular-post">
-                        @foreach ($topweek as $item)
+                        @foreach ($topweek as $key=> $item)
                         <div class="item post-37176">
-                           <a href="{{route('page.movie',$item->slug_movie)}}" title="{{$item->title}}">
+                           <a href="{{route('page.movie',$item->movie->slug_movie)}}" title="{{$item->movie->title}}">
                               <div class="item-link">
-                                 <img src="{{asset('image/posts/'.$item->image)}}" class="lazy post-thumb" alt="{{$item->title}}" title="{{$item->title}}" />
-                                 <span class="is_trailer">Trailer</span>
+                                 <img src="{{asset('image/posts/'.$item->movie->image)}}" class="lazy post-thumb" alt="{{$item->movie->title}}" title="{{$item->movie->title}}" />
+                                 <span class="is_trailer">Top {{$key+1}}</span>
                               </div>
-                              <p class="title">{{$item->title}}</p>
+                              <p class="title">{{$item->movie->title}}</p>
                            </a>
-                           <div class="viewsCount" style="color: #9d9d9d;">{{$item->top_week}} lượt xem</div>
+                           <div class="viewsCount" style="color: #9d9d9d;">{{$item->view}} lượt xem</div>
                            <div style="float: left;">
                               <span class="user-rate-image post-large-rate stars-large-vang" style="display: block;/* width: 100%; */">
                               <span style="width: 0%"></span>
@@ -110,16 +110,16 @@
                   <div role="tabpanel" class="tab-pane active halim-ajax-popular-post">
                      <div class="halim-ajax-popular-post-loading hidden"></div>
                      <div id="halim-ajax-popular-post" class="popular-post">
-                        @foreach ($topmonth as $item)
+                        @foreach ($topmonth as $key=> $item)
                         <div class="item post-37176">
-                           <a href="{{route('page.movie',$item->slug_movie)}}" title="{{$item->title}}">
+                           <a href="{{route('page.movie',$item->movie->slug_movie)}}" title="{{$item->movie->title}}">
                               <div class="item-link">
-                                 <img src="{{asset('image/posts/'.$item->image)}}" class="lazy post-thumb" alt="{{$item->title}}" title="{{$item->title}}" />
-                                 <span class="is_trailer">Trailer</span>
+                                 <img src="{{asset('image/posts/'.$item->movie->image)}}" class="lazy post-thumb" alt="{{$item->movie->title}}" title="{{$item->movie->title}}" />
+                                 <span class="is_trailer">Top {{$key+1}}</span>
                               </div>
-                              <p class="title">{{$item->title}}</p>
+                              <p class="title">{{$item->movie->title}}</p>
                            </a>
-                           <div class="viewsCount" style="color: #9d9d9d;">{{$item->top_month}} lượt xem</div>
+                           <div class="viewsCount" style="color: #9d9d9d;">{{$item->view}} lượt xem</div>
                            <div style="float: left;">
                               <span class="user-rate-image post-large-rate stars-large-vang" style="display: block;/* width: 100%; */">
                               <span style="width: 0%"></span>
